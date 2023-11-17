@@ -9,11 +9,10 @@ protected:
 	std::string temp;  //changed to string type, aka hot, temperate, cold?
 	int speed;
 	bool bleach;
-	std::chrono::seconds duration; // This was changed from int to seconds and renamed from time to reduce confusion
-	//int heaterTemp; // I think this should be scrapped from the class diagram, as in the sequence diagram the heater was linked to the temp
-
+	std::chrono::seconds duration;
+	
 	//These parameters are only for the Timer function
-	std::chrono::steady_clock::time_point startTime; // The pause function will either need to remove lasped time, or likely restart the time from the paus point
+	std::chrono::steady_clock::time_point startTime; // Where the math for the run time begins at
 	bool timerRunning; // Variable added to make the clock work
 	std::chrono::steady_clock::time_point pauseTime; //Time point when paused
 public:

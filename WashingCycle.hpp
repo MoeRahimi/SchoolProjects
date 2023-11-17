@@ -1,6 +1,7 @@
 #include <chrono>
 #include <string>
-
+#ifndef WASHINGCYCLE_HPP
+#define WASHINGCYCLE_HPP
 //Currently 1 second is acting as 1 minute 
 
 class WashingCycle {
@@ -27,6 +28,9 @@ public:
 			auto currentTime = std::chrono::steady_clock::now();
 			auto elapsed = currentTime - startTime;
 			return std::chrono::duration_cast<std::chrono::seconds>(elapsed);
+		} else if (startTime != std::chrono::steady_clock::now()) { //Return if Timer is paused
+			auto elapsed = pauseTime - startTime;
+			return std::chrono::duration_cast<std::chrono::seconds>(elapsed);
 		}
 		return std::chrono::seconds(0); // Return zero if the timer is not running
 	}
@@ -45,7 +49,7 @@ public:
 		pauseTime = std::chrono::steady_clock::now();
 		timerRunning = false;
 	}
-	void resumeTimer() {
+	void resumeTimer() { //NB every time the resume is run, the startTime is adjusted for the pause
 		auto currentTime = std::chrono::steady_clock::now();
 		startTime += (currentTime - pauseTime);
 		timerRunning = true;
@@ -109,4 +113,6 @@ public:
 		temp = "cold";
 	}
 };
+
+#endif
 

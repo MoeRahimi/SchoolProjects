@@ -33,6 +33,13 @@ void TubState(){
 void TubCommand(const string command){
     SerialPin(TUB_TX, OUTPUT, command);//send commands to the tub module
 }
+//pause functions moved and adjusted from header file
+void pauseTimer() {
+	auto pauseTime = std::chrono::steady_clock::now()- start;
+}
+void resumeTimer() {
+	auto start = std::chrono::steady_clock::now() - pauseTime;
+}
 
 int main() {
 

@@ -21,7 +21,7 @@ public:
 	std::string getRinseTemp() const { return rinseTemp; }
 	int getSpeed() const { return speed; }
 	bool getBleach() const { return bleach; }
-	
+
 	std::chrono::seconds getDuration() const { return duration; }
 	bool isTimerRunning() const { return timerRunning; } // This will return current state of the timer
 	std::chrono::seconds getElapsedTime() const {
@@ -35,17 +35,6 @@ public:
 
 	//Setters have been moved to only be in the manual cycle
 	//Moving the timer functions to the controller
-
-	//Other functions
-	void pauseTimer() {
-		pauseTime = std::chrono::steady_clock::now();
-		timerRunning = false;
-	}
-	void resumeTimer() {
-		auto currentTime = std::chrono::steady_clock::now();
-		startTime += (currentTime - pauseTime);
-		timerRunning = true;
-	}
 };
 
 
@@ -57,9 +46,9 @@ public:
 	void setSpeed(int newSpeed) { speed = newSpeed; }
 	void setBleach(bool newBleach) { bleach = newBleach; }
 	void setDuration(std::chrono::seconds newDuration) { duration = newDuration; }
-	ManualCycle(std::string manTemp, int manSpeed, bool manBleach, std::chrono::seconds manDuration) {
-		washTemp = manTemp;
-		rinseTemp = manTemp
+	ManualCycle(std::string manWashTemp, std::string manRinseTemp, int manSpeed, bool manBleach, std::chrono::seconds manDuration) {
+		washTemp = manWashTemp;
+		rinseTemp = manRinseTemp
 		speed = manSpeed;
 		bleach = manBleach;
 		duration = manDuration;
@@ -70,7 +59,7 @@ class QuickCycle : public WashingCycle {
 public:
 	QuickCycle() {
 		washTemp = "cold";
-		rinseTemp = 
+		rinseTemp = "cold";
 		speed = 1600;
 		bleach = false;
 		duration = std::chrono::seconds(50);
@@ -81,7 +70,7 @@ class DarkCycle : public WashingCycle {
 public:
 	DarkCycle() {
 		washTemp = "cold";
-		rinseTemp = 
+		rinseTemp = "cold";
 		speed = 1000;
 		bleach = false;
 		duration = std::chrono::seconds(76);
@@ -92,7 +81,7 @@ class SanitationCycle : public WashingCycle {
 public:
 	SanitationCycle() {
 		washTemp = "hot";
-		rinseTemp = 
+		rinseTemp = "cold";
 		speed = 1600;
 		bleach = false;
 		duration = std::chrono::seconds(80);
@@ -103,7 +92,7 @@ class HeavyCycle : public WashingCycle {
 public:
 	HeavyCycle() { //This has a seperate temp for rinse... and I don't love that currently it is just a fucntion call to change that...
 		washTemp = "hot";
-		rinseTemp = 
+		rinseTemp = "hot";
 		speed = 1600;
 		bleach = true;
 		duration = std::chrono::seconds(80);

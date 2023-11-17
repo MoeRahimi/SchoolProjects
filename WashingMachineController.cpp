@@ -2,6 +2,7 @@
 //Authored by the group "Digital Destroyerz" composed of Moe Rahimi, Hugo Schroeder, Kamelish Candelaria Velez, Keith Askew.
 
 #include <iostream>
+#include "WashingCycle.h"
 
 #include <gpio_library> //would be specific to microcontoller used
 #define LID_SENSOR 1 //would be the actual pin number on the microcontroller
@@ -25,7 +26,35 @@ int main() {
     initializeLidSensor();
     while (LidOpen){
         LightOn();
-        
+        char Selection = GUI_INPUT();
+        switch (Selection)
+        {
+        case "M"://Runs manual cycle
+            setTemp(GUI_INPUT);
+            setSpeed(GUI_INPUT);
+            setBleach(GUI_INPUT);
+            ManualCyce();//Runs manual cycle
+            break;
+
+        case "Q"://Runs quick cycle
+            QuickCycle();
+            break;
+
+        case "D";//Runs dark cycle
+            DarkCycle();
+            break;
+
+        case "S";// Runs sanitation cycle
+            SanitationCycle();
+            break;
+
+        case "H";//Runs heavy cycle
+            HeavyCycle();
+            break;
+
+        default:
+            std::cout << "ERROR: invalid selection"
+        }
     }
 
     return 0;

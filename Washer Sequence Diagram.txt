@@ -1,0 +1,294 @@
+title Digital Destroyerz Washing Machine
+
+actor User
+participant Washer GUI
+participant Washer Control Unit
+participant Tub
+
+User -> Washer GUI: Load Washer & Close Lid
+Washer GUI-->User: Present GUI
+//ends user interation
+
+//MANUAL CYCLE START
+alt Manual Cycle
+User->>Washer GUI: select Manual Cycle
+activate User
+activate Washer GUI
+User->>Washer GUI: select Temperature
+User->>Washer GUI: select Time
+User->>Washer GUI: select Speed
+User->>Washer GUI: select Bleach
+deactivate User
+activate Washer Control Unit
+Washer GUI ->Washer Control Unit: <WashingCycle:ManualCycle>
+Washer GUI ->Washer Control Unit: <ManualCycle:Temp>
+Washer GUI ->Washer Control Unit: <ManualCycle:Time>
+Washer GUI ->Washer Control Unit: <ManualCycle:Speed>
+Washer GUI ->Washer Control Unit: <ManualCycle:Bleach>
+Washer Control Unit-->Washer GUI: <Return: Countdown>
+//manual water fill
+Washer Control Unit->Tub:<Tub:Fill:Temp> 
+activate Tub
+Tub->Tub:<Lock>
+Tub-->Washer Control Unit:<TubFull>
+deactivate Tub
+opt Depending on selection
+Tub -->Tub:<Tub:Heater>
+activate Tub
+deactivate Tub
+Washer Control Unit->Tub:<Tub:Bleach>
+end
+
+//actual washing phase
+Washer Control Unit->Tub:<Tub:Spin> 
+activate Tub
+Washer Control Unit->Washer Control Unit:<Timer:Begin:Time>
+
+//Pause and add more clothes by user
+User->Washer GUI: Pause to add more clothes
+Washer GUI->Washer Control Unit:<ManualCycle:Pause>
+Washer Control Unit ->Washer Control Unit: <Timer:Pause>
+Washer Control Unit->Tub: <Tub:Stop>
+Tub->Tub: <Unlock>
+User->Tub:Adds more clothes
+
+User->Washer GUI: Resume 
+Washer GUI->Washer Control Unit:<ManualCycle:Resume>
+Washer Control Unit ->Washer Control Unit: <Timer:Resume>
+Washer Control Unit->Tub: <Tub:Spin>
+Tub->Tub: <Lock>
+//End of user inflicted pause
+
+Washer Control Unit->Tub:<Tub:Stop>
+deactivate Tub
+//empties water
+Washer Control Unit->Tub:<Tub:Drain> 
+activate Tub
+Tub-->Washer Control Unit:<TubEmpty>
+deactivate Tub
+
+//rinse and spin
+Washer Control Unit->Tub:<Tub:Fill:Cold> 
+activate Tub
+Tub-->Washer Control Unit:<TubFull>
+deactivate Tub
+Washer Control Unit->Tub:<Tub:Spin> 
+activate Tub
+Washer Control Unit->Washer Control Unit:<Timer:Begin:Time>
+Washer Control Unit->Tub:<Tub:Stop>
+deactivate Tub
+//empties water
+Washer Control Unit->Tub:<Tub:Drain> 
+activate Tub
+Tub-->Washer Control Unit:<TubEmpty>
+Tub->Tub:<Unlock>
+deactivate Tub
+
+//ends manual cycle
+Washer Control Unit-->Washer GUI:<ManualCycle:Finish>
+Washer GUI-->User:Wash Complete Alarm
+deactivate Washer Control Unit
+
+//QUICK CYCLE START
+else Quick Cycle
+User->>Washer GUI: select Quick Cycle
+activate Washer Control Unit
+Washer GUI ->Washer Control Unit: <WashingCycle:QuickCycle>
+Washer Control Unit-->Washer GUI: <Return: Countdown>
+
+//water fill
+Washer Control Unit->Tub:<Tub:Fill:Cold> 
+activate Tub
+Tub->Tub:<Lock>
+Tub-->Washer Control Unit:<TubFull>
+deactivate Tub
+Washer Control Unit->Tub:<Tub:Bleach>
+
+//actual washing phase
+Washer Control Unit->Tub:<Tub:Spin> 
+activate Tub
+Washer Control Unit->Washer Control Unit:<Timer:Begin:QuickWash>
+Washer Control Unit->Tub:<Tub:Stop>
+deactivate Tub
+//empties water
+Washer Control Unit->Tub:<Tub:Drain> 
+activate Tub
+Tub-->Washer Control Unit:<TubEmpty>
+deactivate Tub
+
+//rinse and spin
+Washer Control Unit->Tub:<Tub:Fill:Cold> 
+activate Tub
+Tub-->Washer Control Unit:<TubFull>
+deactivate Tub
+Washer Control Unit->Tub:<Tub:Spin> 
+activate Tub
+Washer Control Unit->Washer Control Unit:<Timer:Begin:QuickRinse>
+Washer Control Unit->Tub:<Tub:Stop>
+deactivate Tub
+//empties water
+Washer Control Unit->Tub:<Tub:Drain> 
+activate Tub
+Tub-->Washer Control Unit:<TubEmpty>
+Tub->Tub:<Unlock>
+deactivate Tub
+//ends quick cycle
+Washer Control Unit-->Washer GUI:<QuickCycle:Finish>
+Washer GUI-->User:Wash Complete Alarm
+deactivate Washer Control Unit
+
+//DARK CYCLE START
+else Dark Cycle
+User->>Washer GUI: select Dark Cycle
+activate Washer Control Unit
+Washer GUI ->Washer Control Unit: <WashingCycle:DarkCycle>
+Washer Control Unit-->Washer GUI: <Return: Countdown>
+
+//water fill
+Washer Control Unit->Tub:<Tub:Fill:Cold> 
+activate Tub
+Tub->Tub:<Lock>
+Tub-->Washer Control Unit:<TubFull>
+deactivate Tub
+
+//actual washing phase
+Washer Control Unit->Tub:<Tub:Spin> 
+activate Tub
+Washer Control Unit->Washer Control Unit:<Timer:Begin:DarkWash>
+Washer Control Unit->Tub:<Tub:Stop>
+deactivate Tub
+//empties water
+Washer Control Unit->Tub:<Tub:Drain> 
+activate Tub
+Tub-->Washer Control Unit:<TubEmpty>
+deactivate Tub
+
+//rinse and spin
+Washer Control Unit->Tub:<Tub:Fill:Cold> 
+activate Tub
+Tub-->Washer Control Unit:<TubFull>
+deactivate Tub
+Washer Control Unit->Tub:<Tub:Spin> 
+activate Tub
+Washer Control Unit->Washer Control Unit:<Timer:Begin:DarkRinse>
+Washer Control Unit->Tub:<Tub:Stop>
+deactivate Tub
+//empties water
+Washer Control Unit->Tub:<Tub:Drain> 
+activate Tub
+Tub-->Washer Control Unit:<TubEmpty>
+Tub->Tub:<Unlock>
+deactivate Tub
+//ends dark cycle
+Washer Control Unit-->Washer GUI:<DarkCycle:Finish>
+Washer GUI-->User:Wash Complete Alarm
+deactivate Washer Control Unit
+
+//SANITATION CYCLE START
+else Sanitation Cycle
+User->>Washer GUI: select Sanitation Cycle
+activate Washer Control Unit
+Washer GUI ->Washer Control Unit: <WashingCycle:SanitationCycle>
+Washer Control Unit-->Washer GUI: <Return: Countdown>
+
+//water fill
+Washer Control Unit->Tub:<Tub:Fill:Hot> 
+activate Tub
+Tub->Tub:<Lock>
+Tub-->Washer Control Unit:<TubFull>
+deactivate Tub
+Tub -->Tub:<Tub:Heater>
+activate Tub
+deactivate Tub
+Washer Control Unit->Tub:<Tub:Bleach>
+
+//actual washing phase
+Washer Control Unit->Tub:<Tub:Spin> 
+activate Tub
+Washer Control Unit->Washer Control Unit:<Timer:Begin:SanitationWash>
+Washer Control Unit->Tub:<Tub:Stop>
+deactivate Tub
+//empties water
+Washer Control Unit->Tub:<Tub:Drain> 
+activate Tub
+Tub-->Washer Control Unit:<TubEmpty>
+deactivate Tub
+
+//rinse and spin
+Washer Control Unit->Tub:<Tub:Fill:Hot> 
+activate Tub
+Tub-->Washer Control Unit:<TubFull>
+deactivate Tub
+Tub -->Tub:<Tub:Heater>
+activate Tub
+deactivate Tub
+Washer Control Unit->Tub:<Tub:Spin> 
+activate Tub
+Washer Control Unit->Washer Control Unit:<Timer:Begin:SanitationRinse>
+Washer Control Unit->Tub:<Tub:Stop>
+deactivate Tub
+//empties water
+Washer Control Unit->Tub:<Tub:Drain> 
+activate Tub
+Tub-->Washer Control Unit:<TubEmpty>
+Tub->Tub:<Unlock>
+deactivate Tub
+//ends sanitation cycle
+Washer Control Unit-->Washer GUI:<SanitationCycle:Finish>
+Washer GUI-->User:Wash Complete Alarm
+deactivate Washer Control Unit
+
+//HEAVY CYCLE START
+else Heavy Cycle
+User->>Washer GUI: select Heavy Cycle
+activate Washer Control Unit
+Washer GUI ->Washer Control Unit: <WashingCycle:HeavyCycle>
+Washer Control Unit-->Washer GUI: <Return: Countdown>
+
+//water fill
+Washer Control Unit->Tub:<Tub:Fill:Hot> 
+activate Tub
+Tub->Tub:<Lock>
+Tub-->Washer Control Unit:<TubFull>
+deactivate Tub
+Tub -->Tub:<Tub:Heater>
+activate Tub
+deactivate Tub
+Washer Control Unit->Tub:<Tub:Bleach>
+
+//actual washing phase
+Washer Control Unit->Tub:<Tub:Spin> 
+activate Tub
+Washer Control Unit->Washer Control Unit:<Timer:Begin:HeavyWash>
+Washer Control Unit->Tub:<Tub:Stop>
+deactivate Tub
+//empties water
+Washer Control Unit->Tub:<Tub:Drain> 
+activate Tub
+Tub-->Washer Control Unit:<TubEmpty>
+deactivate Tub
+
+//rinse and spin
+Washer Control Unit->Tub:<Tub:Fill:Cold> 
+activate Tub
+Tub-->Washer Control Unit:<TubFull>
+deactivate Tub
+Washer Control Unit->Tub:<Tub:Spin> 
+activate Tub
+Washer Control Unit->Washer Control Unit:<Timer:Begin:HeavyRinse>
+Washer Control Unit->Tub:<Tub:Stop>
+deactivate Tub
+//empties water
+Washer Control Unit->Tub:<Tub:Drain> 
+activate Tub
+Tub-->Washer Control Unit:<TubEmpty>
+Tub->Tub:<Unlock>
+deactivate Tub
+//ends heavy cycle
+Washer Control Unit-->Washer GUI:<HeavyCycle:Finish>
+Washer GUI-->User:Wash Complete Alarm
+deactivate Washer Control Unit
+
+//ends all UCs
+deactivate Washer GUI
+end

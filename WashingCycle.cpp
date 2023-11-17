@@ -17,9 +17,11 @@ protected:
 	std::chrono::steady_clock::time_point pauseTime; //Time point when paused
 public:
 	//Getters
-	std::string getTemp() const { return temp; }
+	std::string getWashTemp() const { return washTemp; }
+	std::string getRinseTemp() const { return rinseTemp; }
 	int getSpeed() const { return speed; }
 	bool getBleach() const { return bleach; }
+	
 	std::chrono::seconds getDuration() const { return duration; }
 	bool isTimerRunning() const { return timerRunning; } // This will return current state of the timer
 	std::chrono::seconds getElapsedTime() const {
@@ -32,13 +34,7 @@ public:
 	}
 
 	//Setters have been moved to only be in the manual cycle
-	void setDuration(std::chrono::seconds newDuration) { duration = newDuration; }
-	void startTimer() { //This is in place of a getter for the timer
-		if (!timerRunning) {
-			std::chrono::steady_clock::now();
-			timerRunning = true;
-		}
-	}
+	//Moving the timer functions to the controller
 
 	//Other functions
 	void pauseTimer() {
@@ -56,11 +52,14 @@ public:
 class ManualCycle : public WashingCycle {
 public:
 	//I am still not certian if we need all these setters...
-	void setTemp(std::string newTemp) { temp = newTemp; } // Do we want a guard so that temp can only be a few things?
+	void setWashTemp(std::string newWashTemp) { washTemp = newWashTemp; } // Do we want a guard so that temp can only be a few things?
+	void setRinseTemp(std::string newRinseTemp) { rinseTemp = newRinseTemp; }
 	void setSpeed(int newSpeed) { speed = newSpeed; }
 	void setBleach(bool newBleach) { bleach = newBleach; }
+	void setDuration(std::chrono::seconds newDuration) { duration = newDuration; }
 	ManualCycle(std::string manTemp, int manSpeed, bool manBleach, std::chrono::seconds manDuration) {
-		temp = manTemp;
+		washTemp = manTemp;
+		rinseTemp = manTemp
 		speed = manSpeed;
 		bleach = manBleach;
 		duration = manDuration;
@@ -70,7 +69,8 @@ public:
 class QuickCycle : public WashingCycle {
 public:
 	QuickCycle() {
-		temp = "cold";
+		washTemp = "cold";
+		rinseTemp = 
 		speed = 1600;
 		bleach = false;
 		duration = std::chrono::seconds(50);
@@ -80,7 +80,8 @@ public:
 class DarkCycle : public WashingCycle {
 public:
 	DarkCycle() {
-		temp = "cold";
+		washTemp = "cold";
+		rinseTemp = 
 		speed = 1000;
 		bleach = false;
 		duration = std::chrono::seconds(76);
@@ -90,7 +91,8 @@ public:
 class SanitationCycle : public WashingCycle {
 public:
 	SanitationCycle() {
-		temp = "cold";
+		washTemp = "hot";
+		rinseTemp = 
 		speed = 1600;
 		bleach = false;
 		duration = std::chrono::seconds(80);
@@ -100,7 +102,8 @@ public:
 class HeavyCycle : public WashingCycle {
 public:
 	HeavyCycle() { //This has a seperate temp for rinse... and I don't love that currently it is just a fucntion call to change that...
-		temp = "hot";
+		washTemp = "hot";
+		rinseTemp = 
 		speed = 1600;
 		bleach = true;
 		duration = std::chrono::seconds(80);

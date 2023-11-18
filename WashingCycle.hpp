@@ -8,15 +8,18 @@ protected:
 	std::string temp;  //changed to string type, aka hot, temperate, cold?
 	int speed;
 	bool bleach;
+
 	std::chrono::seconds duration; // This was changed from int to seconds and renamed from time to reduce confusion
 	//int heaterTemp; // I think this should be scrapped from the class diagram, as in the sequence diagram the heater was linked to the temp
 
 	//These parameters are only for the Timer function
 	std::chrono::steady_clock::time_point startTime; // The pause function will either need to remove lasped time, or likely restart the time from the paus point
+
 	bool timerRunning; // Variable added to make the clock work
 	std::chrono::steady_clock::time_point pauseTime; //Time point when paused
 public:
 	//Getters
+
 	std::string getWashTemp() const { return washTemp; }
 	std::string getRinseTemp() const { return rinseTemp; }
 	int getSpeed() const { return speed; }
@@ -29,11 +32,13 @@ public:
 			auto currentTime = std::chrono::steady_clock::now();
 			auto elapsed = currentTime - startTime;
 			return std::chrono::duration_cast<std::chrono::seconds>(elapsed);
+
 		}
 		return std::chrono::seconds(0); // Return zero if the timer is not running
 	}
 
 	//Setters have been moved to only be in the manual cycle
+
 	//Moving the timer functions to the controller
 };
 
@@ -41,6 +46,7 @@ public:
 class ManualCycle : public WashingCycle {
 public:
 	//I am still not certian if we need all these setters...
+
 	void setWashTemp(std::string newWashTemp) { washTemp = newWashTemp; } // Do we want a guard so that temp can only be a few things?
 	void setRinseTemp(std::string newRinseTemp) { rinseTemp = newRinseTemp; }
 	void setSpeed(int newSpeed) { speed = newSpeed; }
@@ -58,6 +64,7 @@ public:
 class QuickCycle : public WashingCycle {
 public:
 	QuickCycle() {
+
 		washTemp = "cold";
 		rinseTemp = "cold";
 		speed = 1600;

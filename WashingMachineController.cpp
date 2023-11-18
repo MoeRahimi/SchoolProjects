@@ -1,6 +1,6 @@
 // Example of classes and obect interaction for group project in CSC 300. 
 //Authored by the group "Digital Destroyerz" composed of Moe Rahimi, Hugo Schroeder, Kamelish Candelaria Velez, Keith Askew.
-
+// Does this comitt work?
 #include <iostream>
 #include <chrono>
 #include "WashingCycle.hpp"
@@ -24,6 +24,7 @@ char GUIinput(){
     SerialPin(GUI_RX, INPUT, char GUIselection); //read the button selection from the GUI
     return GUIselection;
 }
+
 void GUICommand(const string command){
     SerialPin(GUI_TX, OUTPUT, command);//send commands to the tub module
 }

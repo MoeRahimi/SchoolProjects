@@ -2,6 +2,7 @@
 #include <string>
 #include <WashingCycle.hpp>
 
+///Testing a pull request with this
 // Normally these would output phsyiscall instead of to the terminal. Also the sheet should be noted that all the Tub functions on the class diagram now only that WashingCycle as input
 class Tub{
 private:

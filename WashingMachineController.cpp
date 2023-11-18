@@ -1,8 +1,8 @@
 // Example of classes and obect interaction for group project in CSC 300. 
 //Authored by the group "Digital Destroyerz" composed of Moe Rahimi, Hugo Schroeder, Kamelish Candelaria Velez, Keith Askew.
-
+// Does this comitt work?
 #include <iostream>
-#include "WashingCycle.hpp"
+#include "WashingCycle.h"
 
 #include <gpio_library> //would be specific to microcontoller used
 #define LID_SENSOR 1 //would be the actual pin number on the microcontroller

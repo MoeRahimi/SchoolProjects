@@ -2,7 +2,7 @@
 //Authored by the group "Digital Destroyerz" composed of Moe Rahimi, Hugo Schroeder, Kamelish Candelaria Velez, Keith Askew.
 
 #include <iostream>
-#include "WashingCycle.h"
+#include "WashingCycle.hpp"
 
 #include <gpio_library> //would be specific to microcontoller used
 #define LID_SENSOR 1 //would be the actual pin number on the microcontroller

@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <chrono>
-#include "WashingCycle.h"
+#include "WashingCycle.hpp"
 
 #include <gpio_library> //would be specific to microcontoller used. Pin and port numbers are arbitrary since there is no defined board. *Loosely* based on Arduino GPIO functions.
 #define LID_SENSOR 1 //pin to lid sensor for open or closed state
